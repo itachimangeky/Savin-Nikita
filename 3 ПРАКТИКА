@@ -1,0 +1,81 @@
+#include <iostream>
+
+using namespace std;
+
+int* GenerateRandomArray(const int min, const int max, const int size);
+int** TransformTo2D(const int* const array, const int size, const int imax, const int jmax);
+void Free2DArray(int** array, const int imax, const int jmax);
+void PrintArray2D(const int** array, const int imax, const int jmax);
+
+int main()
+{
+	const int arr_size = 16;
+
+	const int m	in = -10;
+	const int max = 10;
+
+	const int imax = 4;
+	const int jmax = 4;
+
+	if (jmax * imax != arr_size) {
+		cout « "Wrong" « endl;
+		return 0;
+	}
+
+	auto arr = GenerateRandomArray(min, max, arr_size);
+
+	//
+	cout « "Printing array.." « endl;
+	for (int i = 0; i < arr_size; i++) {
+		cout « arr[i] « "\t";
+	}
+	cout « endl;
+	//
+
+	auto arr2D = TransformTo2D(arr, arr_size, imax, jmax);
+	PrintArray2D((const int**)arr2D, imax, jmax);
+
+	system("pause");
+}
+
+int* GenerateRandomArray(const int min, const int max, const int size) {
+	auto arr = new int[size];
+	for (int i = 0; i < size; i++) {
+		int number = rand() % 21 - 10;
+		arr[i] = number;
+	}
+	return arr;
+}
+
+int** TransformTo2D(const int* const array, const int size, const int imax, const int jmax) {
+	int** arr_2D = new int* [imax];
+	for (int i = 0; i < imax; i++) {
+		arr_2D[i] = new int[jmax];
+	}
+	int* pointer = (int*)array;
+	for (auto i = 0; i < imax; i++) {
+		for (auto j = 0; j < jmax; j++) {
+			arr_2D[i][j] = *pointer;
+			pointer++;
+		}
+	}
+	return arr_2D;
+}
+
+void Free2DArray(const int** array, const int imax, const int jmax) {
+	for (int i = 0; i < imax; i++) {
+		for (int j = 0; j < jmax; j++)
+			free((int*)array[i][j]);
+		delete[] array[i];
+	}
+	delete[] array;
+}
+
+void PrintArray2D(const int** array, const int imax, const int jmax) {
+	cout « "Printing 2D array.." « endl;
+	for (auto i = 0; i < imax; i++) {
+		for (auto j = 0; j < jmax; j++)
+			cout « array[i][j] « "\t";
+		cout « endl;
+	}
+}
